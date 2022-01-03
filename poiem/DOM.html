@@ -1,0 +1,46 @@
+<!-- /**
+ * DOM tree는 브라우저가 HTML 문서를 로드한 후 파싱하여 생성하는 모델 의미.
+ * 객체의 트리로 구조화돼있기 때문에 DOM tree라고 부른다.
+ * 
+ */ -->
+<html>
+<head>
+    <style>
+        .red { color: #ff0000; }
+        .blue { color: #0000ff; }
+    </style>
+</head>
+<body>
+    <div>
+        <h1> Cities </h1>
+    </div>
+    <ul>
+        <li id="one" class="red"> Seoul </li>
+        <li id="two" class="red"> London </li>
+        <li id="three" class="red">Newyork</li>
+        <li id="four">Tokyo</li>
+    </ul>
+</body>
+</html>
+
+<!-- 
+    DOM에서 모든 요소, 어트리뷰트, 텍스트는 하나의 객체이며 Document 객체의 자식이다.
+    요소의 중첩 관계는 객체의 트리로 구조화하여 부자관계를 표현한다.
+    DOM tree의 진입점은 document 객체이며 최종점은 요소의 텍스트를 나타내는 객체이다.
+
+    DOM tree는 네 종류의 노드로 구성된다.
+
+    문서 노드(Document Node)
+    트리의 최상위에 존재하며 각각 요소, 어트리뷰트, 텍스트 노드에 접근하려면 document 노드를 통해야 한다.
+    즉, DOM tree에 접근하기 위한 시작점(entry point)이다.
+    
+
+    요소 노드(Element Node)
+    요소 노드는 HTML 요소를 포함한다. 중첩에 의해 부자 관계를 가지며
+    부자관계를 통해 정보를 구조화함.
+    따라서 element 노드는 문서의 구조를 서술하는 것
+    텍스트 노드에 접근하려면 먼저 요소 노드를 찾아 접근해야 함.
+
+    어트리뷰트 노드
+    
+ -->
