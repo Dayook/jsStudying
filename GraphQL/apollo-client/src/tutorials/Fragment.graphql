@@ -1,0 +1,28 @@
+type Person {
+    firstName
+    lastName
+    avatar(size: string)
+}
+
+
+fragment NameParts on Person {
+    firstName
+    lastName
+}
+
+
+# fragment를 사용했을 때
+query GetPerson {
+    people(id: "7")
+    ...NameParts
+    avatar(size: LARGE)
+}
+
+# fragment를 사용하지 않았을 때
+query GetPerson {
+    people(id:"7") {
+        firstName
+        lastName
+        avatar(size: LARGE)
+    }
+}

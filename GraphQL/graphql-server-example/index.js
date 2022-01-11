@@ -19,6 +19,11 @@ const typeDefs = gql`
     books: [Book]
     authors: [Author]
   }
+
+  type Query{
+    numberSix: Int!
+    numberSevne: Int!
+  }
 `;
 
 const books = [
@@ -49,7 +54,10 @@ const resolvers = {
  * We've created our schema, dataset, resolver
  * provide this information to Apollo Server when we initialize it.
  */
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers,
+dataSources: () => {
+  
+} });
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
