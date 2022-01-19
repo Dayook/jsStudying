@@ -10,6 +10,7 @@ export default function Fetch({
   )
 }){
   const { loading, data, error} = useFetch(uri);
+  console.log("fetch!");
   if (loading) return loadingFallback;
   if (error) return renderError(error);
   if (data) return renderSuccess({data});

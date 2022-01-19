@@ -21,6 +21,18 @@
     
      // 서버 응답 시 호출될 이벤트 핸들러
      xhr.onreadystatechange = function () {
+        // 서버 응답 완료가 아니면 무시 
+        if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
-     }
+        if (xhr.status === 200 ){
+            console.log(xhr.response);
+            // 비동기 함수 결과에 대한 처리는 반환할 수 없다.
+            return xhr.response;
+        } else {
+            console.log('Error: ' + xhr.status);
+        }
+    };
+
+    xhr.open('GET', url);
+    xhr.send();
  }

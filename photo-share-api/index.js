@@ -4,8 +4,12 @@
  * 비동기로 작성할 수 있으며 ...  데이터를 가져오거나 업데이트 작업 할 수 있음
  */
 
+const { ApolloServer } = require("apollo-server-express");
 const express = require("express");
-const { ApolloServer, gql } = require("apollo-server");
+const { gql } = require("apollo-server");
+
+// express()를 호출하여 익스프레스 애플리케이션을 만든다.
+var app = express();
 
 const typeDefss = `
     type Query {
@@ -22,17 +26,23 @@ const typeDefs = gql`
     GRAPHIC
   }
 
+  type User {
+    name: String
+    postedPhotos: [Photo!]!
+  }
+
   type Photo {
     id: ID!
     url: String!
     name: String!
     description: String
     category: PhotoCategory!
+    postedBy: User! #Photo를 게시한 User로 돌아갈 수 있는 링크 만듦. 무방향 그래프로 만든 셈임
   }
 
   input PostPhotoInput {
     name: String!
-    category: PhotoCategory = PORTRAIT
+    category: PhotoCategory = PORTRAIT # 기본값 PORTRAIT으로 설정
     description: String
   }
 
@@ -51,7 +61,30 @@ const typeDefs = gql`
 
 // 메모리에 데이터 저장할 때 사용할 데이터 타입
 var _id = 0;
-var photos = [];
+var users = [
+  {
+    githubLogin: "mHattrup",
+    name: "Mike Hattrup",
+  },
+  {
+    githubLogin: "gPlake",
+    name: "Glen Plake",
+  },
+  {
+    githubLogin: "sSchmidt",
+    name: "Scot Schmidt",
+  },
+];
+
+var photos = [
+  {
+    id: "1",
+    name: "Dropping the Heart Chute",
+    decription: "The heart chute is one of my favorite chutes",
+    category: "Action",
+    githubUser: "gPlake",
+  },
+];
 
 const resolvers = {
   Query: {
@@ -97,6 +130,14 @@ const resolvers = {
    */
   Photo: {
     url: (parent) => `http://yoursite.com/img/${parent.id}.jpg`,
+    postedBy: (parent) => {
+      return users.find((u) => u.githubLogin === parent.githubUser);
+    },
+  },
+  User: {
+    postedPhotos: (parent) => {
+      return photos.filter((p) => p.githubUser === parent.githubLogin);
+    },
   },
 };
 
@@ -117,10 +158,15 @@ const server = new ApolloServer({
 });
 
 // 웹 서버를 구동하기 위해 listen 메소드를 호출
-server
-  .listen({ port: 4001 })
-  .then(({ url }) => console.log(`GraphQL Service running on ${url}`));
+// server
+//   .listen({ port: 4001 })
+//   .then(({ url }) => console.log(`GraphQL Service running on ${url}`));
 
+// 미들웨어가 같은 경로에 마운트되도록 함
+server.applyMiddleware({ app });
+
+app.get("/", (req, res) => res.end("PhotoShare API에 오신 것을 환영합니다"));
+app.listen({ port: 4001 }, () => console.log(`GraphQL Serverr running...`));
 /**
  * Root Resolver
  * GraphQL APi는 QUery, Mutation, Subscription 루트 타입을 가진다
@@ -129,5 +175,7 @@ server
  *
  * Type Resolver
  * GraphQL 쿼리, 뮤테이션, 섭스크립션 작업 후 결과값으로 반환되는 데이터의 형태는 쿼리의 형태와 동일하다
+ *
+ * graphQL의 진정한 힘은 데이터 포인터 사이를 잇는 연결 고리인 엣지에 있다.
  *
  */

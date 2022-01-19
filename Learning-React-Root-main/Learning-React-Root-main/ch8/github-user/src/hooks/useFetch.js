@@ -8,7 +8,9 @@ export function useFetch(uri) {
   useEffect(()=>{
     if (!uri) return;
     fetch(uri)
-      .then(data => data.json(), console.log("first"))
+      .then(data => data.json(), 
+      
+      console.log("first"))
       .then(setData)
       .then(()=> setLoading(false), console.log("second"))
       .catch(setError, console.log("third"));

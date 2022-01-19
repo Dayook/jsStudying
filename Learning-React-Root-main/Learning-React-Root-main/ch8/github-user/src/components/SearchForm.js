@@ -7,6 +7,7 @@ const SearchForm = ({value, onSearch= f=>f}) =>{
 
   const submit = e => {
     e.preventDefault();
+    alert('검색');
     onSearch(input);
   }
   

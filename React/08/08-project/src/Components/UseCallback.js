@@ -1,0 +1,50 @@
+/**
+ * useCallback
+ * useMemo오 ㅏ비슷
+ * 렌더링 성능 최적화 해야 하는 상황에서 사용
+ *
+ * 이벤트 핸들러 함수를 필요할 떄만 생성할 수 있음
+ */ /**
+ * 함수형 컴포넌트 내부에서 발생하는 연산을 최적화
+ */
+import React, { useState, useMemo, useCallback } from "react";
+
+const getAverage = (numbers) => {
+  console.log("평균값 계산 중");
+  if (numbers.length === 0) return 0;
+  const sum = numbers.reduce((a, b) => a + b);
+  return sum / numbers.length;
+};
+
+const Average = () => {
+  const [list, setList] = useState([]);
+  const [number, setNumber] = useState();
+
+  const onChange = useCallback((e) => {
+    setNumber(e.target.value);
+  }, []); // 컴포넌트가 처음 렌더링될 때만 함수 생성
+
+  const onInsert = useCallback(() => {
+    const nextList = list.concat(parseInt(number));
+    setList(nextList);
+    setNumber("");
+  }, [number, list]);
+
+  const avg = useMemo(() => getAverage(list), [list]);
+
+  return (
+    <div>
+      <input value={number} onChange={onChange} />
+      <button onClick={onInsert}>등록</button>
+      <ul>
+        {list.map((value, index) => (
+          <li key={index}>{value}</li>
+        ))}
+      </ul>
+      <div>
+        <b> 평균값: </b>
+        {avg}
+      </div>
+    </div>
+  );
+};

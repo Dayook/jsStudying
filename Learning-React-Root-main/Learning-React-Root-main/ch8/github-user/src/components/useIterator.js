@@ -27,6 +27,6 @@ export const useIterator = (
     return [items[i], prev, next];
   } else {
     console.log("item 없음");  
-    return [items[0], prev, next];
+    return [[0,0,0], prev, next];
   }
 };

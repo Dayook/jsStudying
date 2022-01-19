@@ -28,7 +28,6 @@ function UserDetails({data}) {
 export default function GitHubUser({ login }) {
   console.log("githubuser render"); 
   return (
-    
     <Fetch
       uri={`https://api.github.com/users/${login}`}
       renderSuccess={UserDetails}
